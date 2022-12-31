@@ -6,152 +6,96 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> 
-       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" 
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" 
-    crossorigin="anonymous"></script>
-    <script src="bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> 
+         
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js">
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
 
-    <title>Bucket List</title>
+    <title>Buying Land in Mars</title>
 
     <style>
         * {
-            font-family: 'Gowun Dodum', sans-serif;
+            font-family: 'Gowun Batang', serif;
+            color: white;
         }
 
-        .mypic {
-            width: 100%;
-            height: 200px;
-
-            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1601024445121-e5b82f020549?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&auto=format&fit=crop&w=1189&q=80');
+        body {
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://cdn.aitimes.com/news/photo/202010/132592_129694_3139.jpg');
             background-position: center;
             background-size: cover;
-
-            color: white;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
         }
 
-        .mypic>h1 {
-            font-size: 30px;
+        h1 {
+            font-weight: bold;
         }
 
-        .mybox {
-            width: 95%;
-            max-width: 700px;
-            padding: 20px;
-            box-shadow: 0px 0px 10px 0px lightblue;
-            margin: 20px auto;
+        .order {
+            width: 500px;
+            margin: 60px auto 0px auto;
+            padding-bottom: 60px;
         }
 
-        .mybucket {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
+        .mybtn {
+            width: 100%;
         }
 
-        .mybucket>input {
-            width: 70%;
+        .order>table {
+            margin: 40px 0;
+            font-size: 18px;
         }
 
-        .mybox>li {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-
-            margin-bottom: 10px;
-            min-height: 48px;
-        }
-
-        .mybox>li>h2 {
-            max-width: 75%;
-            font-size: 20px;
-            font-weight: 500;
-            margin-right: auto;
-            margin-bottom: 0px;
-        }
-
-        .mybox>li>h2.done {
-            text-decoration: line-through
+        option {
+            color: black;
         }
     </style>
     <script>
         $(document).ready(function () {
-            show_bucket();
+            show_order();
         });
-        function show_bucket() {
-            $('#bucket-list').empty();
+        function show_order() {
             $.ajax({
-                type: "GET",
-                url: "/bucket",
+                type: 'GET',
+                url: '/mars',
                 data: {},
                 success: function (response) {
-                    let rows = response['buckets'];
+                    $('#order-box').empty();
+                    let rows = response['orders'];
                     for (let i = 0; i < rows.length; i++) {
-                        let bucket = rows[i]['bucket'];
-                        let num = rows[i]['num'];
-                        let done = rows[i]['done'];
-                        let temp_html = '';
-                        if (done === 0) {
-                            temp_html = `
-        <li>
-            <h2>✅ ${bucket}</h2>
-            <button onclick="done_bucket(${num})" type="button" class="btn btn-outline-primary">Done!</button>
-            <button onclick="delete_bucket(${num})" type="button" class="btn btn-outline-danger">Delete!</button>
-        </li>
-                            `;
-                        } else {
-                            temp_html = `
-        <li>
-            <h2 class="done">✅ ${bucket}</h2>
-            <button onclick="delete_bucket(${num})" type="button" class="btn btn-outline-danger">Delete!</button>
-        </li>
-                            `;
-                        }
-                        $('#bucket-list').append(temp_html);
+                        let name = rows[i]['name'];
+                        let address = rows[i]['address'];
+                        let size = rows[i]['size'];
+                        let temp_html = `
+                <tr>
+                    <td>${name}</td>
+                    <td>${address}</td>
+                    <td>${size}</td>
+                </tr>
+                        `;
+                        $('#order-box').append(temp_html);
                     }
                 }
             });
         }
-        function save_bucket() {
-            let bucket = $('#bucket').val();
+        function save_order() {
+            let name = $('#name').val();
+            let address = $('#address').val();
+            let size = $('#size').val();
             $.ajax({
-                type: "POST",
-                url: "/bucket",
-                data: {bucket_give: bucket},
+                type: 'POST',
+                url: '/mars',
+                data: {
+                    name_give: name,
+                    address_give: address,
+                    size_give: size,
+                },
                 success: function (response) {
-                    alert(response["msg"])
-                    window.location.reload();
-                }
-            });
-        }
-        function done_bucket(num) {
-            $.ajax({
-                type: "POST",
-                url: "/bucket/done",
-                data: { num_give: num },
-                success: function (response) {
-                    alert(response["msg"]);
-                    window.location.reload();
-                }
-            });
-        }
-        function delete_bucket(num) {
-            $.ajax({
-                type: "POST",
-                url: "/delete",
-                data: { num_give: num },
-                success: function (response) {
-                    alert(response["msg"]);
+                    alert(response['msg']);
                     window.location.reload();
                 }
             });
@@ -160,28 +104,62 @@
 </head>
 
 <body>
-    <div class="mypic">
-        <h1>My Bucketlist</h1>
-    </div>
-    <div class="mybox">
-        <div class="mybucket">
-            <input id="bucket" class="form-control" type="text" placeholder="Enter your bucket list item here">
-            <button onclick="save_bucket()" type="button" class="btn btn-outline-primary">Save</button>
+    <div class="mask"></div>
+    <div class="order">
+        <h1>Buy Martian Land!</h1>
+        <h3>Price: $1.00 / acre</h3>
+        <p>
+            Did you know you could buy Martian land?<br />
+            This chance won't come again!
+        </p>
+        <div class="order-info">
+            <div class="input-group mb-3">
+                <span class="input-group-text">Name</span>
+                <input id="name" type="text" class="form-control">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text">Address</span>
+                <input id="address" type="text" class="form-control">
+            </div>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="size">Acres</label>
+                <select class="form-select" id="size">
+                    <option selected>-- Select acreage --</option>
+                    <option value="10">10 acres</option>
+                    <option value="20">20 acres</option>
+                    <option value="30">30 acres</option>
+                    <option value="40">40 acres</option>
+                    <option value="50">50 acres</option>
+                </select>
+            </div>
+            <button onclick="save_order()" type="button" class="btn btn-warning mybtn">Create order</button>
         </div>
-    </div>
-    <div class="mybox" id="bucket-list">
-        <li>
-            <h2>✅ Bucket list number 1</h2>
-            <button onclick="done_bucket(5)" type="button" class="btn btn-outline-primary">Done!</button>
-        </li>
-        <li>
-            <h2>✅ Bucket list number 2</h2>
-            <button onclick="done_bucket(5)" type="button" class="btn btn-outline-primary">Done!</button>
-        </li>
-        <li>
-            <h2>✅ Bucket list number 3</h2>
-            <button onclick="done_bucket(5)" type="button" class="btn btn-outline-primary">Done!</button>
-        </li>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Acres</th>
+                </tr>
+            </thead>
+            <tbody id="order-box">
+                <tr>
+                    <td>Jim</td>
+                    <td>100 Downing St.</td>
+                    <td>20 acres</td>
+                </tr>
+                <tr>
+                    <td>Bob</td>
+                    <td>856 Peterson Ave.</td>
+                    <td>10 acres</td>
+                </tr>
+                <tr>
+                    <td>Steve</td>
+                    <td>212 Baker St.</td>
+                    <td>30 acres</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>
 
